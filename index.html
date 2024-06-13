@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>Lennox重啟腳本生成</title>
+<script>
+function generateAndDownloadBatchFile() {
+    var filename = document.getElementById("filename").value;
+    if (!filename) {
+        alert("請填寫檔案名稱");
+        return;
+    }
+    var content = "chcp 65001\n@echo off\n:loop\n" + filename + ".exe\necho Waiting for 10 seconds...\ntimeout /t 10\ngoto loop";
+    var blob = new Blob([content], { type: 'text/plain' });
+    var anchor = document.createElement('a');
+    anchor.download = filename + ".bat";
+    anchor.href = window.URL.createObjectURL(blob);
+    anchor.click();
+    window.URL.revokeObjectURL(anchor.href);
+}
+</script>
+</head>
+<body>
+<h1>Lennox重啟腳本生成</h1>
+<label for="filename">輸入檔案名稱:</label>
+<input type="text" id="filename" name="filename">
+<button onclick="generateAndDownloadBatchFile()">下載</button>
+</body>
+</html>
