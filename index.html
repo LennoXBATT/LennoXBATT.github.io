@@ -10,7 +10,19 @@ function generateAndDownloadBatchFile() {
         alert("請填寫檔案名稱");
         return;
     }
-    var content = "chcp 65001\n@echo off\n:loop\n" + filename + ".exe\necho Waiting for 10 seconds...\ntimeout /t 10\ngoto loop";
+    var content = `
+@echo off
+chcp 65001
+cd /d "%~dp0"
+set folder_name=%~dp0
+for %%I in ("%folder_name:~0,-1%") do set folder_name=%%~nxI
+title %folder_name%
+:loop
+${filename}.exe
+timeout /t 10
+goto loop
+pause
+`.trim();
     var blob = new Blob([content], { type: 'text/plain' });
     var anchor = document.createElement('a');
     anchor.download = filename + ".bat";
